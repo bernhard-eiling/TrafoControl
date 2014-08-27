@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TrafoAP.iml" filepath="$PROJECT_DIR$/TrafoAP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TrafoControl.iml" filepath="$PROJECT_DIR$/TrafoControl.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

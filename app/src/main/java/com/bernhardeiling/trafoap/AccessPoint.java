@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,6 +27,10 @@ public class AccessPoint {
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+    }
+
+    public boolean isConnected() {
+        return networkInfo.isConnected();
     }
 
     public void createAccessPoint(String ssid, String pass) {
@@ -55,6 +60,7 @@ public class AccessPoint {
                         if (isWifiApEnabledmethod.getName().equals("isWifiApEnabled")) {
                             while (!(Boolean) isWifiApEnabledmethod.invoke(wifiManager)) {
                                 // Keep it running until ...
+                                Log.d("Tag", "running");
                             }
 
                             for (Method method1 : managerMethods) {
@@ -73,5 +79,16 @@ public class AccessPoint {
                 }
             }
         }
+    }
+
+
+    public WifiManager getWifiManager() {
+        return wifiManager;
+    }
+    public ConnectivityManager getConnectivityManager() {
+        return connectivityManager;
+    }
+    public NetworkInfo getNetworkInfo() {
+        return networkInfo;
     }
 }
