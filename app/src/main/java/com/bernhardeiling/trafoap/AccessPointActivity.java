@@ -27,7 +27,8 @@ public class AccessPointActivity extends ListActivity implements LoaderManager.L
     TextView connectionStatus;
     AccessPoint accessPoint;
     ArrayAdapter adapter;
-    static final String[] JACKETS = new String[] {"Wolfjacke", "Rabenjacke", "The HOFF", "asdw", "www", "foo", "bar", "so", "much", "more"};
+    String[] JACKETS = new String[] {"Wolfjacke", "Rabenjacke", "The HOFF", "asdw", "www", "foo", "bar", "so", "much", "more"};
+    ArrayList<String> jackets = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class AccessPointActivity extends ListActivity implements LoaderManager.L
         ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
         root.addView(progressBar);
 
-        ArrayList<String> jackets = new ArrayList<String>();
+        jackets = new ArrayList<String>();
         for (String jacket : JACKETS) {
             jackets.add(jacket);
         }
@@ -55,6 +56,10 @@ public class AccessPointActivity extends ListActivity implements LoaderManager.L
     public void openAP(View view) {
         accessPoint = new AccessPoint(this);
         accessPoint.createAccessPoint("TrafoControl", "123");
+        accessPoint.getConnectedDevices();
+        jackets.clear();
+        jackets.addAll(accessPoint.getConnectedDevices());
+        adapter.notifyDataSetChanged();
     }
 
     public void sendData(View view) {
