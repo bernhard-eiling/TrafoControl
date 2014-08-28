@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:onClick="openAP"
-        android:text="@string/open_access_point" />
+        android:onClick="scanDevices"
+        android:text="@string/scan_devices" />
 
     <Button
         android:layout_width="wrap_content"

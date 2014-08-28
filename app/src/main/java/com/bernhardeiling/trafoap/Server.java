@@ -15,40 +15,32 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
- * Created by Bernhard on 22.08.14.
+ * Created by Bernhard on 28.08.14.
  */
-public class SendDataTask extends AsyncTask <Void, Void, Void> {
+public class Server extends AsyncTask<Void, Void, Void> {
 
     final static String TAG = "SendData";
     String message;
     Context context;
+    String ip;
     InetAddress ipAddress;
     final static int PORT = 1212;
     final Handler toastHandler = new Handler();
 
-    public SendDataTask(Context context) {
+    public Server(String ip, Context context) {
+        this.ip = ip;
         this.context = context;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         DatagramSocket socket;
-        boolean isReachable = false;
 
         try {
-            ipAddress = InetAddress.getByName("192.168.1.24");
-            isReachable = ipAddress.isReachable(2000);
+            ipAddress = InetAddress.getByName(ip);
         } catch (UnknownHostException e) {
             e.printStackTrace();
             Log.e(TAG, "unknown host");
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "io exception");
-        } catch (NetworkOnMainThreadException e) {
-            e.printStackTrace();
-            Log.e(TAG, "NetworkOnMainThreadException");
-        } finally {
-            Log.e(TAG, "is reachable: " + isReachable);
         }
 
         try {
@@ -73,9 +65,11 @@ public class SendDataTask extends AsyncTask <Void, Void, Void> {
     void setMessage(String message) {
         this.message = message;
     }
+
     void setContext(Context context) {
         this.context = context;
     }
+
     void msg(String e) {
         Toast.makeText(context, e, Toast.LENGTH_SHORT).show();
     }

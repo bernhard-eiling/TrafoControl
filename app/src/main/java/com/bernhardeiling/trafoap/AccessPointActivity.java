@@ -6,29 +6,24 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import java.net.InetAddress;
+import com.bernhardeiling.trafoap.interfaces.AsyncScanDevices;
+
 import java.util.ArrayList;
 
 
-public class AccessPointActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class AccessPointActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {//, AsyncScanDevices {
 
     TextView connectionStatus;
     AccessPoint accessPoint;
     ArrayAdapter adapter;
-    String[] JACKETS = new String[] {"Wolfjacke", "Rabenjacke", "The HOFF", "asdw", "www", "foo", "bar", "so", "much", "more"};
-    ArrayList<String> jackets = new ArrayList<String>();
+    ArrayList<String> jacketIPs = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,38 +31,31 @@ public class AccessPointActivity extends ListActivity implements LoaderManager.L
         setContentView(R.layout.activity_access_point);
         connectionStatus = (TextView) findViewById(R.id.connection_status);
 
-        ProgressBar progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleSmall);
-        //ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        progressBar.setIndeterminate(true);
-        getListView().setEmptyView(progressBar);
-        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
-        root.addView(progressBar);
+        accessPoint = new AccessPoint(this);
+        accessPoint.createAccessPoint("TrafoControl", "123");
 
-        jackets = new ArrayList<String>();
-        for (String jacket : JACKETS) {
-            jackets.add(jacket);
-        }
-
-        adapter = new ArrayAdapter(getApplicationContext(), R.layout.list_item, jackets);
+        adapter = new ArrayAdapter(getApplicationContext(), R.layout.list_item, jacketIPs);
         setListAdapter(adapter);
 
     }
 
-    public void openAP(View view) {
-        accessPoint = new AccessPoint(this);
-        accessPoint.createAccessPoint("TrafoControl", "123");
-        accessPoint.getConnectedDevices();
-        jackets.clear();
-        jackets.addAll(accessPoint.getConnectedDevices());
-        adapter.notifyDataSetChanged();
+    AsyncScanDevices scanDevices = new AsyncScanDevices() {
+        @Override
+        public void onFinishScanningConnectedDevices(ArrayList<String> devices) {
+            jacketIPs.clear();
+            jacketIPs.addAll(devices);
+            adapter.notifyDataSetChanged();
+        }
+    };
+
+    public void scanDevices(View view) {
+        accessPoint.scanForConnectedDevices(scanDevices);
     }
 
     public void sendData(View view) {
-        if (true) {
-        //if (accessPoint != null && accessPoint.isConnected()) {
-            SendDataTask sendDataTask = (SendDataTask) new SendDataTask(this);
-            sendDataTask.setMessage("test 123");
-            sendDataTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        for (String ip : jacketIPs) {
+            accessPoint.sendData(ip, "beepBeepBlink");
         }
     }
 

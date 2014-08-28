@@ -5,7 +5,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.NetworkOnMainThreadException;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.bernhardeiling.trafoap.interfaces.AsyncScanDevices;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -13,6 +19,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
@@ -58,7 +69,7 @@ public class AccessPoint {
                 wifiConfiguration.wepKeys[0] = pass;
                 wifiConfiguration.wepTxKeyIndex = 0;
 
-                wifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+                wifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
 
                 try {
                     enabled = (Boolean) method.invoke(wifiManager, wifiConfiguration, true);
@@ -87,36 +98,9 @@ public class AccessPoint {
         }
     }
 
-    public ArrayList<String> getConnectedDevices() {
-        BufferedReader reader = null;
-        ArrayList<String> ipList = new ArrayList<String>();
-
-        try {
-            reader = new BufferedReader(new FileReader("/proc/net/arp"));
-            String line;
-            while ((line = reader.readLine()) != null) {
-
-                String[] splitted = line.split(" +");
-                if (splitted != null && splitted.length >= 4) {
-                    String mac = splitted[3];
-                    if (mac.matches("..:..:..:..:..:..")) {
-                        ipList.add(splitted[0]);
-                    }
-                }
-            }
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        } finally {
-            try {
-                if (reader != null) reader.close();
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
-
-        return ipList;
+    public void scanForConnectedDevices(AsyncScanDevices delegate) {
+        ScanDevicesTask scanDevicesTask = new ScanDevicesTask(delegate);
+        scanDevicesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public WifiManager getWifiManager() {
@@ -129,5 +113,11 @@ public class AccessPoint {
 
     public NetworkInfo getNetworkInfo() {
         return networkInfo;
+    }
+
+    public void sendData(String ip, String message) {
+        Server sendDataTask = new Server(ip, context);
+        sendDataTask.setMessage(message);
+        sendDataTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }
