@@ -7,12 +7,18 @@ import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.illposed.osc.OSCMessage;
+import com.illposed.osc.OSCPortOut;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Bernhard on 28.08.14.
@@ -23,8 +29,7 @@ public class Server extends AsyncTask<Void, Void, Void> {
     String message;
     Context context;
     String ip;
-    InetAddress ipAddress;
-    final static int PORT = 1212;
+
     final Handler toastHandler = new Handler();
 
     public Server(String ip, Context context) {
@@ -34,7 +39,9 @@ public class Server extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        DatagramSocket socket;
+
+        InetAddress ipAddress = null;
+        final int port = 997;
 
         try {
             ipAddress = InetAddress.getByName(ip);
@@ -44,11 +51,17 @@ public class Server extends AsyncTask<Void, Void, Void> {
         }
 
         try {
-            socket = new DatagramSocket();
-            DatagramPacket packet;
-            packet = new DatagramPacket(message.getBytes(), message.length(), ipAddress, PORT);
-            socket.setBroadcast(true);
-            socket.send(packet);
+            DatagramSocket socket = new DatagramSocket();
+            OSCPortOut portOut = new OSCPortOut(ipAddress, port, socket);
+
+            List<Object> args = new ArrayList<Object>(2);
+            args.add(3);
+            args.add("hello");
+
+            OSCMessage message = new OSCMessage("/sayhello", args);
+            message.addArgument("OSC msg");
+            portOut.send(message);
+
         } catch (final UnknownHostException e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
@@ -56,6 +69,9 @@ public class Server extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
         } catch (final IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        } catch (final Exception e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
         }

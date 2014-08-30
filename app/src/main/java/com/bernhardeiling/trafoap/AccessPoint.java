@@ -69,7 +69,8 @@ public class AccessPoint {
                 wifiConfiguration.wepKeys[0] = pass;
                 wifiConfiguration.wepTxKeyIndex = 0;
 
-                wifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+                //wifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+                wifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 
                 try {
                     enabled = (Boolean) method.invoke(wifiManager, wifiConfiguration, true);

@@ -1,10 +1,8 @@
 package com.bernhardeiling.trafoap;
 
 import android.app.ListActivity;
-import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +16,7 @@ import com.bernhardeiling.trafoap.interfaces.AsyncScanDevices;
 import java.util.ArrayList;
 
 
-public class AccessPointActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {//, AsyncScanDevices {
+public class AccessPointActivity extends ListActivity {
 
     TextView connectionStatus;
     AccessPoint accessPoint;
@@ -32,7 +30,7 @@ public class AccessPointActivity extends ListActivity implements LoaderManager.L
         connectionStatus = (TextView) findViewById(R.id.connection_status);
 
         accessPoint = new AccessPoint(this);
-        accessPoint.createAccessPoint("TrafoControl", "123");
+        accessPoint.createAccessPoint("TrafoControl", "1234567890");
 
         adapter = new ArrayAdapter(getApplicationContext(), R.layout.list_item, jacketIPs);
         setListAdapter(adapter);
@@ -55,7 +53,7 @@ public class AccessPointActivity extends ListActivity implements LoaderManager.L
     public void sendData(View view) {
 
         for (String ip : jacketIPs) {
-            accessPoint.sendData(ip, "beepBeepBlink");
+            accessPoint.sendData(ip, "beepBeepBlink\n");
         }
     }
 
@@ -76,30 +74,6 @@ public class AccessPointActivity extends ListActivity implements LoaderManager.L
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    // Called when a new Loader needs to be created
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
-        /*
-        return new CursorLoader(this, ContactsContract.Data.CONTENT_URI,
-                PROJECTION, SELECTION, null, null);
-                */
-        return null;
-    }
-
-    // Called when a previously created loader has finished loading
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Swap the new cursor in.  (The framework will take care of closing the
-        // old cursor once we return.)
-    }
-
-    // Called when a previously created loader is reset, making the data unavailable
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed.  We need to make sure we are no
-        // longer using it.
     }
 
     @Override
