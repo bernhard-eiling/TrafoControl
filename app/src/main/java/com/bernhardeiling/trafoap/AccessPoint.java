@@ -7,7 +7,7 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.bernhardeiling.trafoap.interfaces.AsyncScanDevices;
+import com.bernhardeiling.trafoap.interfaces.ScanDevicesInterface;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -74,7 +74,7 @@ public class AccessPoint {
         }
     }
 
-    public void scanForConnectedDevices(AsyncScanDevices delegate) {
+    public void scanForConnectedDevices(ScanDevicesInterface delegate) {
         ScanDevicesTask scanDevicesTask = new ScanDevicesTask(delegate);
         scanDevicesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

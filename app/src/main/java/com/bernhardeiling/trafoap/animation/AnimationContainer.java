@@ -46,10 +46,10 @@ public class AnimationContainer {
             int[][] frame  = new int[NUMLEDS][NUMCOLORCHANNELS];
             for (int l = 0; l < frame.length; l++) {
                 for (int c = 0; c < frame[l].length; c++) {
-                    frame[l][c] = (int) Math.random() * 256;
-                    randomColor.addFrame(frame);
+                    frame[l][c] = (int) (Math.random() * 256);
                 }
             }
+            randomColor.addFrame(frame);
         }
         return randomColor;
     }

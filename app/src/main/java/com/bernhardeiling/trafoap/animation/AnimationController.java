@@ -3,6 +3,8 @@ package com.bernhardeiling.trafoap.animation;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.bernhardeiling.trafoap.interfaces.SyncAnimationInterface;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -13,10 +15,10 @@ import java.util.ArrayList;
 public class AnimationController {
 
     private static final int PORT = 997;
+    private boolean syncAnimation = false;
     Context context;
     AnimationContainer animationContainer;
     ArrayList<InetAddress> inetAddresses = new ArrayList<InetAddress>();
-
     SyncAnimationThread syncAnimationThread = new SyncAnimationThread(PORT);
 
     public AnimationController(Context context) {
@@ -25,8 +27,16 @@ public class AnimationController {
         syncAnimationThread.start();
     }
 
+    SyncAnimationInterface syncAnimationInterface = new SyncAnimationInterface() {
+        @Override
+        public void onFinishLoadingAnimation(boolean syncAnimation) {
+            syncAnimationThread.setSyncAnimation(syncAnimation);
+        }
+    };
+
     public void setAnimation(String animation) {
-        LoadAnimationTask loadAnimationTask = new LoadAnimationTask(PORT);
+        syncAnimationThread.setSyncAnimation(false);
+        LoadAnimationTask loadAnimationTask = new LoadAnimationTask(PORT, syncAnimationInterface, this.syncAnimation);
         if (animation.equals("Strobo")) {
             loadAnimationTask.setAnimation(animationContainer.getStrobo());
             syncAnimationThread.setAnimation(animationContainer.getStrobo());
@@ -56,6 +66,7 @@ public class AnimationController {
     }
 
     public void setSyncAnimation(boolean syncAnimation) {
-        syncAnimationThread.setSyncAnimation(syncAnimation);
+        this.syncAnimation = syncAnimation;
+        syncAnimationThread.setSyncAnimation(this.syncAnimation);
     }
 }

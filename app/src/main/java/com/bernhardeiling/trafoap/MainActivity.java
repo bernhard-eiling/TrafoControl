@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.bernhardeiling.trafoap.animation.AnimationController;
-import com.bernhardeiling.trafoap.interfaces.AsyncScanDevices;
+import com.bernhardeiling.trafoap.interfaces.ScanDevicesInterface;
 
 import java.util.ArrayList;
 
@@ -51,7 +51,7 @@ public class MainActivity extends ListActivity implements OnItemSelectedListener
         animationSpinner.setAdapter(animationAdapter);
     }
 
-    AsyncScanDevices scanDevices = new AsyncScanDevices() {
+    ScanDevicesInterface scanDevices = new ScanDevicesInterface() {
         @Override
         public void onFinishScanningConnectedDevices(ArrayList<String> scan) {
             devices.clear();

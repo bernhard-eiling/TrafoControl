@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
+import com.bernhardeiling.trafoap.interfaces.SyncAnimationInterface;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -22,9 +24,13 @@ public class LoadAnimationTask extends AsyncTask<Void, Void, Void> {
     ArrayList<InetAddress> inetAddresses = new ArrayList<InetAddress>();
     Animation animation = null;
     private int port;
+    private SyncAnimationInterface delegate ;
+    private boolean currentSyncAnimation;
 
-    public LoadAnimationTask(int port) {
+    public LoadAnimationTask(int port, SyncAnimationInterface delegate, boolean currentSyncAnimation) {
         this.port = port;
+        this.delegate = delegate;
+        this.currentSyncAnimation = currentSyncAnimation;
     }
 
     @Override
@@ -49,6 +55,11 @@ public class LoadAnimationTask extends AsyncTask<Void, Void, Void> {
             }
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void _) {
+        delegate.onFinishLoadingAnimation(currentSyncAnimation);
     }
 
     private byte[] frameToBytes(int frameIndex) {

@@ -2,6 +2,8 @@ package com.bernhardeiling.trafoap.animation;
 
 import android.util.Log;
 
+import com.bernhardeiling.trafoap.interfaces.SyncAnimationInterface;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

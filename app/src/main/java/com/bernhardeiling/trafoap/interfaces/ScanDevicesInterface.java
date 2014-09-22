@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Bernhard on 28.08.14.
  */
-public interface AsyncScanDevices {
+public interface ScanDevicesInterface {
 
     void onFinishScanningConnectedDevices(ArrayList<String> devices);
 }

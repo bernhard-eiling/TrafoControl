@@ -3,7 +3,7 @@ package com.bernhardeiling.trafoap;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.bernhardeiling.trafoap.interfaces.AsyncScanDevices;
+import com.bernhardeiling.trafoap.interfaces.ScanDevicesInterface;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class ScanDevicesTask extends AsyncTask<Void, Void, ArrayList<String>> {
 
     final static String TAG = "ScanDevices";
-    public AsyncScanDevices delegate;
+    public ScanDevicesInterface delegate;
 
-    public ScanDevicesTask(AsyncScanDevices delegate) {
+    public ScanDevicesTask(ScanDevicesInterface delegate) {
         this.delegate = delegate;
     }
 
