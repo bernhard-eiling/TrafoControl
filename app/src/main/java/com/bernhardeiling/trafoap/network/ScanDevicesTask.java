@@ -1,4 +1,4 @@
-package com.bernhardeiling.trafoap;
+package com.bernhardeiling.trafoap.network;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -30,7 +30,7 @@ public class ScanDevicesTask extends AsyncTask<Void, Void, ArrayList<String>> {
         BufferedReader reader = null;
         ArrayList<String> ipList = new ArrayList<String>();
         int timeout = 500;
-
+/*
         try {
             reader = new BufferedReader(new FileReader("/proc/net/arp"));
             String line;
@@ -55,6 +55,8 @@ public class ScanDevicesTask extends AsyncTask<Void, Void, ArrayList<String>> {
                 Log.e(TAG, e.getMessage());
             }
         }
+        */
+        ipList.add("192.56.23.1");
         return ipList;
     }
 

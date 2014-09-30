@@ -10,18 +10,17 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.bernhardeiling.trafoap.animation.AnimationController;
 import com.bernhardeiling.trafoap.interfaces.ScanDevicesInterface;
+import com.bernhardeiling.trafoap.network.AccessPoint;
 
 import java.util.ArrayList;
 
 
 public class MainActivity extends ListActivity implements OnItemSelectedListener {
 
-    TextView connectionStatus;
     Spinner animationSpinner;
     AccessPoint accessPoint;
     AnimationController animationController = new AnimationController(this);
@@ -31,11 +30,10 @@ public class MainActivity extends ListActivity implements OnItemSelectedListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_access_point);
-        connectionStatus = (TextView) findViewById(R.id.connection_status);
+        setContentView(R.layout.main);
 
-        accessPoint = new AccessPoint(this);
-        accessPoint.createAccessPoint("TrafoControl", "1234567890");
+        accessPoint = new AccessPoint(this, "TrafoControl", "1234567890");
+        accessPoint.createAccessPoint();
 
         devicesAdapter = new ArrayAdapter(getApplicationContext(), R.layout.list_item, devices);
         setListAdapter(devicesAdapter);
@@ -66,11 +64,7 @@ public class MainActivity extends ListActivity implements OnItemSelectedListener
     }
 
     public void toggleAnimation(View view) {
-        if (((ToggleButton) view).isChecked()) {
-            animationController.setSyncAnimation(true);
-        } else {
-            animationController.setSyncAnimation(false);
-        }
+        animationController.setSyncAnimation(((ToggleButton) view).isChecked());
     }
 
     @Override
@@ -80,12 +74,6 @@ public class MainActivity extends ListActivity implements OnItemSelectedListener
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.access_point, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

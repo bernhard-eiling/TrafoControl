@@ -2,13 +2,10 @@ package com.bernhardeiling.trafoap.animation;
 
 import android.util.Log;
 
-import com.bernhardeiling.trafoap.interfaces.SyncAnimationInterface;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
@@ -22,36 +19,52 @@ public class SyncAnimationThread extends Thread {
     private int port;
     private ArrayList<InetAddress> inetAddresses = new ArrayList<InetAddress>();
     private boolean syncAnimation = false;
+    private LoadAnimationThread loadAnimationThread;
 
     public SyncAnimationThread(int port) {
         this.port = port;
     }
 
     public void run() {
-        while (true) {
-            if (syncAnimation == true && animation != null) {
-                int frameIndex = frameCounter % animation.getNumFrames();
 
-                for (InetAddress address : inetAddresses) {
-                    try {
-                        String syncData = frameIndex + "t";
-                        byte[] syncSignal = syncData.getBytes();
-                        DatagramPacket packet = new DatagramPacket(syncSignal, syncSignal.length, address, port);
-                        DatagramSocket socket = new DatagramSocket();
-                        socket.send(packet);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    frameCounter++;
-                    try {
-                        sleep(animation.getFrameDelay());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+        while (true) {
+            if (syncAnimation == true && loadAnimationThread != null && animation != null) {
+                syncData(loadAnimationThread);
             }
         }
     }
+
+    private void syncData(LoadAnimationThread loadAnimationThread) {
+
+        synchronized (loadAnimationThread) {
+
+            int frameIndex = frameCounter % animation.getNumFrames();
+            long startTime = System.currentTimeMillis();
+            for (InetAddress address : inetAddresses) {
+
+                try {
+                    String syncData = "sync" + frameIndex + "t";
+                    byte[] syncSignal = syncData.getBytes();
+                    Log.e("SendData", new String(syncSignal));
+                    DatagramPacket packet = new DatagramPacket(syncSignal, syncSignal.length, address, port);
+                    DatagramSocket socket = new DatagramSocket();
+                    socket.send(packet);
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                }
+                frameCounter++;
+            }
+            long endTime = System.currentTimeMillis() - startTime;
+            try {
+                int frameDelay = animation.getFrameDelay() - (int)endTime;
+                if (frameDelay < 0) frameDelay = 0;
+                sleep(frameDelay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     void setAnimation(Animation animation) {
         this.animation = animation;
@@ -63,5 +76,10 @@ public class SyncAnimationThread extends Thread {
 
     void setInetAddresses(ArrayList<InetAddress> inetAddresses) {
         this.inetAddresses = inetAddresses;
+    }
+
+    void setLoadAnimationThread(LoadAnimationThread loadAnimationThread) {
+        this.loadAnimationThread = loadAnimationThread;
+        this.loadAnimationThread.start();
     }
 }

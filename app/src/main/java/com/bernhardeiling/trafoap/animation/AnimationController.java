@@ -1,9 +1,6 @@
 package com.bernhardeiling.trafoap.animation;
 
 import android.content.Context;
-import android.os.AsyncTask;
-
-import com.bernhardeiling.trafoap.interfaces.SyncAnimationInterface;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -27,34 +24,24 @@ public class AnimationController {
         syncAnimationThread.start();
     }
 
-    SyncAnimationInterface syncAnimationInterface = new SyncAnimationInterface() {
-        @Override
-        public void onFinishLoadingAnimation(boolean syncAnimation) {
-            syncAnimationThread.setSyncAnimation(syncAnimation);
+    public void setAnimation(String animationString) {
+        Animation animation = null;
+        if (animationString.equals("Strobo")) {
+            animation = animationContainer.getStrobo();
+        } else if (animationString.equals("Color")) {
+            animation = animationContainer.getRandomColor();
+        } else if (animationString.equals("Red")) {
+            animation = animationContainer.getRed();
+        } else if (animationString.equals("Off")) {
+            animation = animationContainer.getBlack();
         }
-    };
-
-    public void setAnimation(String animation) {
-        syncAnimationThread.setSyncAnimation(false);
-        LoadAnimationTask loadAnimationTask = new LoadAnimationTask(PORT, syncAnimationInterface, this.syncAnimation);
-        if (animation.equals("Strobo")) {
-            loadAnimationTask.setAnimation(animationContainer.getStrobo());
-            syncAnimationThread.setAnimation(animationContainer.getStrobo());
-        } else if (animation.equals("Color")){
-            loadAnimationTask.setAnimation(animationContainer.getRandomColor());
-            syncAnimationThread.setAnimation(animationContainer.getRandomColor());
-        } else if (animation.equals("Red")){
-            loadAnimationTask.setAnimation(animationContainer.getRed());
-            syncAnimationThread.setAnimation(animationContainer.getRed());
-        } else if (animation.equals("Off")){
-            loadAnimationTask.setAnimation(animationContainer.getBlack());
-            syncAnimationThread.setAnimation(animationContainer.getBlack());
-        }
-        loadAnimationTask.setInetAddresses(inetAddresses);
-        loadAnimationTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        LoadAnimationThread loadAnimationThread = new LoadAnimationThread(PORT, this.inetAddresses, animation);
+        syncAnimationThread.setLoadAnimationThread(loadAnimationThread);
+        syncAnimationThread.setAnimation(animation);
     }
 
     public void setDevices(ArrayList<String> IPs) {
+        inetAddresses.clear();
         for (String ip : IPs) {
             try {
                 inetAddresses.add(InetAddress.getByName(ip));
