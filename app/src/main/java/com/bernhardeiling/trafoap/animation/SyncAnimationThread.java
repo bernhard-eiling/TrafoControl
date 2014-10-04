@@ -43,14 +43,13 @@ public class SyncAnimationThread extends Thread {
             for (InetAddress address : inetAddresses) {
 
                 try {
-                    String syncData = "sync" + frameIndex + "t";
+                    String syncData = "s" + frameIndex + "t";
                     byte[] syncSignal = syncData.getBytes();
-                    Log.e("SendData", new String(syncSignal));
                     DatagramPacket packet = new DatagramPacket(syncSignal, syncSignal.length, address, port);
                     DatagramSocket socket = new DatagramSocket();
                     socket.send(packet);
                 } catch (IOException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
                 frameCounter++;
             }

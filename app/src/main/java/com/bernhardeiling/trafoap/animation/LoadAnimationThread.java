@@ -33,36 +33,60 @@ public class LoadAnimationThread extends Thread {
     private synchronized void loadData() {
         for (InetAddress address : inetAddresses) {
             try {
+                // CHANNEL
+                /*
                 DatagramSocket socket = new DatagramSocket();
+
                 for (int f = 0; f < animation.getNumFrames(); f++) {
                     for (int c = 0; c < 3; c++) {
                         try {
                             byte[] channelToLoad = channelToBytes(f, c);
-                            Log.e(TAG, new String(channelToLoad));
+                            //byte[] channelToLoad = frameToBytes(f);
+                            //Log.e(TAG, new String(channelToLoad));
                             DatagramPacket packet = new DatagramPacket(channelToLoad, channelToLoad.length, address, port);
                             socket.send(packet);
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         } catch (final IOException e) {
-                                    /*
-                                    e.printStackTrace();
-                                    Log.e(TAG, e.getMessage());
-                                    */
+                            e.printStackTrace();
+                            Log.e(TAG, e.getMessage());
                         }
-/*
+
+
+
+                    }
+
+                }
+*/
+
+                // FRAME
+                DatagramSocket socket = new DatagramSocket();
+
+                for (int f = 0; f < animation.getNumFrames(); f++) {
+
+                    try {
+                        byte[] channelToLoad = frameToHexaBytes(f);
+                        DatagramPacket packet = new DatagramPacket(channelToLoad, channelToLoad.length, address, port);
+                        socket.send(packet);
                         try {
                             Thread.sleep(50);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        */
+                    } catch (final IOException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, e.getMessage());
                     }
-
                 }
             } catch (final SocketException e) {
                 e.printStackTrace();
                 Log.e(TAG, e.getMessage());
             }
 
-            String finishString = "finisht";
+            String finishString = "ft";
             byte[] finishData = finishString.getBytes();
             try {
                 DatagramPacket packetStart = new DatagramPacket(finishData, finishData.length, address, port);
@@ -79,11 +103,30 @@ public class LoadAnimationThread extends Thread {
     }
 
     private byte[] frameToBytes(int frameIndex) {
-        String animationString = "load";
+        String animationString = "l";
         int[][] frameToSend = animation.getFrame(frameIndex);
         for (int f = 0; f < frameToSend.length; f++) {
             for (int c = 0; c < frameToSend[f].length; c++) {
-                animationString += Integer.toHexString(frameToSend[f][c]);
+                //animationString += Integer.toHexString(frameToSend[f][c]);
+                animationString += frameToSend[f][c];
+                animationString += ",";
+            }
+            animationString += "c";
+        }
+        animationString += "t";
+        return animationString.getBytes();
+    }
+
+    private byte[] frameToHexaBytes(int frameIndex) {
+        String animationString = "l";
+        int[][] frameToSend = animation.getFrame(frameIndex);
+        for (int f = 0; f < frameToSend.length; f++) {
+            for (int c = 0; c < frameToSend[f].length; c++) {
+                StringBuilder builder = new StringBuilder();
+                String hexValue = Integer.toHexString(frameToSend[f][c]);
+                builder.append(hexValue);
+                if (builder.length() < 2) builder.insert(0, '0'); // add a leading zero if string has length of 1
+                animationString += builder.toString();
             }
         }
         animationString += "t";
@@ -91,10 +134,11 @@ public class LoadAnimationThread extends Thread {
     }
 
     private byte[] channelToBytes(int frameIndex, int channelIndex) {
-        String animationString = "load";
+        String animationString = "l";
         int[][] frameToSend = animation.getFrame(frameIndex);
         for (int f = 0; f < frameToSend.length; f++) {
-            animationString += Integer.toHexString(frameToSend[f][channelIndex]);
+            animationString += frameToSend[f][channelIndex];
+            animationString += ",";
         }
         animationString += "t";
         return animationString.getBytes();

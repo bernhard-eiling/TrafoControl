@@ -34,6 +34,10 @@ public class AnimationController {
             animation = animationContainer.getRed();
         } else if (animationString.equals("Off")) {
             animation = animationContainer.getBlack();
+        } else if (animationString.equals("Swap")) {
+            animation = animationContainer.getSwap();
+        } else if (animationString.equals("Low")) {
+            animation = animationContainer.getLow();
         }
         LoadAnimationThread loadAnimationThread = new LoadAnimationThread(PORT, this.inetAddresses, animation);
         syncAnimationThread.setLoadAnimationThread(loadAnimationThread);

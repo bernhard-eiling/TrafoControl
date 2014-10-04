@@ -10,9 +10,11 @@
     <string name="animation_off">Animation OFF</string>
 
     <string-array name="animation_array">
+        <item>Swap</item>
         <item>Strobo</item>
         <item>Color</item>
         <item>Red</item>
+        <item>Low</item>
         <item>Off</item>
     </string-array>
 
