@@ -1,6 +1,4 @@
-package com.bernhardeiling.trafoap.animation;
-
-import android.util.Log;
+package com.bernhardeiling.trafocontrol.animation;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

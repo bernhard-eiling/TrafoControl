@@ -1,4 +1,4 @@
-package com.bernhardeiling.trafoap;
+package com.bernhardeiling.trafocontrol;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

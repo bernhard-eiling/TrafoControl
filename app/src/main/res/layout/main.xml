@@ -10,15 +10,16 @@
     tools:context=".AccessPointActivity">
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="center"
         android:onClick="scanDevices"
         android:text="@string/scan_devices" />
 
     <ToggleButton
         android:id="@+id/toggle_animation"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
+        android:gravity="center"
         android:layout_height="wrap_content"
         android:textOn="@string/animation_on"
         android:textOff="@string/animation_off"

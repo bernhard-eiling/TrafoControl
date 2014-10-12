@@ -1,4 +1,4 @@
-package com.bernhardeiling.trafoap.animation;
+package com.bernhardeiling.trafocontrol.animation;
 
 import android.content.Context;
 

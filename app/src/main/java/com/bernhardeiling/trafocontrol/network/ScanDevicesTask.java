@@ -1,9 +1,9 @@
-package com.bernhardeiling.trafoap.network;
+package com.bernhardeiling.trafocontrol.network;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.bernhardeiling.trafoap.interfaces.ScanDevicesInterface;
+import com.bernhardeiling.trafocontrol.interfaces.ScanDevicesInterface;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

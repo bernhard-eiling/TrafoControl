@@ -1,4 +1,4 @@
-package com.bernhardeiling.trafoap.animation;
+package com.bernhardeiling.trafocontrol.animation;
 
 import android.util.Log;
 
@@ -33,36 +33,6 @@ public class LoadAnimationThread extends Thread {
     private synchronized void loadData() {
         for (InetAddress address : inetAddresses) {
             try {
-                // CHANNEL
-                /*
-                DatagramSocket socket = new DatagramSocket();
-
-                for (int f = 0; f < animation.getNumFrames(); f++) {
-                    for (int c = 0; c < 3; c++) {
-                        try {
-                            byte[] channelToLoad = channelToBytes(f, c);
-                            //byte[] channelToLoad = frameToBytes(f);
-                            //Log.e(TAG, new String(channelToLoad));
-                            DatagramPacket packet = new DatagramPacket(channelToLoad, channelToLoad.length, address, port);
-                            socket.send(packet);
-                            try {
-                                Thread.sleep(50);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        } catch (final IOException e) {
-                            e.printStackTrace();
-                            Log.e(TAG, e.getMessage());
-                        }
-
-
-
-                    }
-
-                }
-*/
-
-                // FRAME
                 DatagramSocket socket = new DatagramSocket();
 
                 for (int f = 0; f < animation.getNumFrames(); f++) {
@@ -107,7 +77,6 @@ public class LoadAnimationThread extends Thread {
         int[][] frameToSend = animation.getFrame(frameIndex);
         for (int f = 0; f < frameToSend.length; f++) {
             for (int c = 0; c < frameToSend[f].length; c++) {
-                //animationString += Integer.toHexString(frameToSend[f][c]);
                 animationString += frameToSend[f][c];
                 animationString += ",";
             }

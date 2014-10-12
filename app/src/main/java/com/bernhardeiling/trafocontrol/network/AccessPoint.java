@@ -1,14 +1,11 @@
-package com.bernhardeiling.trafoap.network;
+package com.bernhardeiling.trafocontrol.network;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.bernhardeiling.trafoap.interfaces.ScanDevicesInterface;
-import com.bernhardeiling.trafoap.network.ScanDevicesTask;
+import com.bernhardeiling.trafocontrol.interfaces.ScanDevicesInterface;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

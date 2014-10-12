@@ -1,4 +1,4 @@
-package com.bernhardeiling.trafoap.interfaces;
+package com.bernhardeiling.trafocontrol.interfaces;
 
 import java.util.ArrayList;
 

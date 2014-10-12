@@ -1,8 +1,7 @@
-package com.bernhardeiling.trafoap;
+package com.bernhardeiling.trafocontrol;
 
 import android.app.ListActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,9 +11,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
 
-import com.bernhardeiling.trafoap.animation.AnimationController;
-import com.bernhardeiling.trafoap.interfaces.ScanDevicesInterface;
-import com.bernhardeiling.trafoap.network.AccessPoint;
+import com.bernhardeiling.trafocontrol.animation.AnimationController;
+import com.bernhardeiling.trafocontrol.interfaces.ScanDevicesInterface;
+import com.bernhardeiling.trafocontrol.network.AccessPoint;
 
 import java.util.ArrayList;
 
