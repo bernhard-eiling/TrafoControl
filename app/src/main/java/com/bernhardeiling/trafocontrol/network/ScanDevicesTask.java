@@ -55,8 +55,6 @@ public class ScanDevicesTask extends AsyncTask<Void, Void, ArrayList<String>> {
                 Log.e(TAG, e.getMessage());
             }
         }
-
-        //ipList.add("192.56.23.1"); // TESTING
         return ipList;
     }
 

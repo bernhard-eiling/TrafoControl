@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
  */
 public class AccessPoint extends Thread {
 
-    private final static String TAG = "AP";
     private WifiManager wifiManager;
     private String ssid;
     private String password;
